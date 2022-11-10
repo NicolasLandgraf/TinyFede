@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TinyFede</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/favicon/site.webmanifest">
+
+  <link href="/style.css" rel="stylesheet">
+
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <div class="header">
+    <div class="container">
+      <h1>Bueno, vamo' a jugar</h1>
+      <img src="/images/filthy.png">
+    </div>
+  </div>
+
+  <section class="optimizer-intro">
+    
+    <div class="container">
+
+      <div class="form-step">
+        <h5>Estos archivos provienen de la carpeta "images". Añade nuevos archivos para renombrarlos y comprimirlos.<br>
+        Esta función quita tildes, espacios, caracteres especiales no admitidos en URLs, etc.</h5>
+
+        <div class="before-aft">
+          <ul class="before-col">
+            <p class="li-title">Antes</p>
+            <% for (var i = 0; i < fileList.length; i++) { %>
+              <li index="<%= i %>"><%= fileList[i] %></li>
+            <% } %>
+          </ul>
+
+          <ul class="after-col">
+            <p class="li-title">Despues</p>
+            <% for (var i = 0; i < fileList.length; i++) { %>
+              <li id="<%= i %>"><%= fileList[i] %></li>
+            <% } %>
+          </ul>
+        </div>
+      </div>
+
+      <button class="rename-btn">Renombrar imagenes</button>
+
+      <a href="/optimizer/compress"><button class="lowkey">Omitir</button></a>
+
+    </div>
+  </section>
+
+
+  <script>
+
+    $(document).ready(function() {
+       
+        $('.before-col li').each( function() {
+          let index = $(this).attr('index')
+          let content = $('.after-col #'+index).html().replace(/[&\/\\#,+()$~%_'":*?<>{}\s+]/g,'-').toLowerCase();
+
+          if ( content.charAt( 0 ) == '-' ) {
+            content = content.substring(1);
+          }
+          
+          if ( content.includes("-.")) {
+            content = content.replace('-.','.');
+          }
+
+          if ( content.includes("--")) {
+            content = content.replace('--','-');
+          }
+
+          if ( content.includes("--")) {
+            content = content.replace('--','-');
+          }
+
+          if ( content.includes(".-")) {
+            content = content.replace('.-','-');
+          }
+
+          if ( content.includes("..")) {
+            content = content.replace('..','.');
+          }
+
+          // Quito tildes
+          content = content.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+          $('.after-col #'+index).html(content)
+        })
+
+
+        $('.rename-btn').click(function(e) {
+          e.preventDefault()
+
+          $.ajax({
+            url: "http://localhost:3000/optimizer/rename",
+            method:"POST",
+            dataType : "JSON"
+          }).done(function(response) {
+
+            window.location.href = "/optimizer/compress";
+
+          }).fail(function(jqXHR, textStatus) {
+            console.log('failed')
+          });
+
+        });
+
+    });
+  </script>
+      
+</body>
+</html>

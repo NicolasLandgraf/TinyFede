@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TinyFede</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/favicon/site.webmanifest">
+
+  <link href="/style.css" rel="stylesheet">
+
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <div class="header grow">
+    <div class="container">
+      <h1>No le tengas miedo al exito</h1>
+      <img src="/images/grow.png">
+    </div>
+  </div>
+
+  <section class="optimizer-intro">
+    <div class="container">
+
+      <span class="breadcrumb">Volver a <a href="/">Renamer</a></span>
+
+      <form action="/optimizer/results" method="post" enctype="application/x-www-form-urlencoded">
+        <div class="form-step">
+          <h2>Selecciona los archivos a optimizar</h2>
+          <h5> Se hallaron <strong><%= cantidad %> imagenes</strong> para optimizar.</h5>
+          <label class="select-all-label"><input type="checkbox" class="select-all" /> Seleccionar todos</label>
+
+          <div class="file-list">
+            <% for (var i = 0; i < fileList.length; i++) { %>
+              <label><input type="checkbox" name="file" value="<%= fileList[i] %>" class="file-li"> <%= fileList[i] %></label>
+            <% } %>
+          </div>
+        </div>
+
+        <div class="form-step">
+          <h3>API Key de TinyPng</h3>
+          <p>Modificar dentro de <strong>routes/optimizer.js</strong><br> <small><%= apikey %></small></p>
+        </div>
+
+        <div class="form-step">
+          <h3>Ancho maximo</h3>
+          <p>Dejar vacio si usaremos ancho maximo</p>
+          <input type="number" name="ancho" placeholder="Solo números"/>
+        </div>
+
+        <input type="submit" value="Optimizar" />
+      </form>
+    </div>
+  </section>
+
+
+  <script>
+
+    $('.select-all').change(function() {
+
+      if ( $(this).is(":checked") ) {
+        $('.file-li').each(function() {
+          $(this).prop( "checked", true );
+        })
+      } else {
+        $('.file-li').each(function() {
+          $(this).prop( "checked", false );
+        })
+      }
+    })
+  </script>
+      
+</body>
+</html>
