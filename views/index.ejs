@@ -23,7 +23,11 @@
 
   <div class="header">
     <div class="container">
-      <h1>Bueno, vamo' a jugar</h1>
+      <% if(fileList.length > 0) { %>
+        <h1>Bueno <br><span>vamo' a jugar</span></h1>
+      <% } else { %>
+        <h1>uff.. <br><span>no me la container</span></h1>
+      <% } %>
       <img src="/images/filthy.png">
     </div>
   </div>
