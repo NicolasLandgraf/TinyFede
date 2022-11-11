@@ -23,8 +23,13 @@
 
   <div class="header grow">
     <div class="container">
-      <h1>No le tengas miedo al exito</h1>
-      <img src="/images/grow.png">
+      <% if(apikey) { %>
+        <h1>Toca y anda <br><span>No le tengas miedo al exito</span></h1>
+        <img src="/images/grow.png">
+      <% } else { %>
+        <h1>Para que te traje.. <br><span>Pedi un cuatro y me trajieron un pomelo</span></h1>
+        <img src="/images/grow.png">
+      <% } %>
     </div>
   </div>
 
@@ -33,32 +38,41 @@
 
       <span class="breadcrumb">Volver a <a href="/">Renamer</a></span>
 
-      <form action="/optimizer/results" method="post" enctype="application/x-www-form-urlencoded">
-        <div class="form-step">
-          <h2>Selecciona los archivos a optimizar</h2>
-          <h5> Se hallaron <strong><%= cantidad %> imagenes</strong> para optimizar.</h5>
-          <label class="select-all-label"><input type="checkbox" class="select-all" /> Seleccionar todos</label>
+      <% if(apikey) { %>
+        <form action="/optimizer/results" method="post" enctype="application/x-www-form-urlencoded">
+          <div class="form-step">
+            <h2>Selecciona los archivos a optimizar</h2>
+            <h5> Se hallaron <strong><%= cantidad %> imagenes</strong> para optimizar.</h5>
+            <label class="select-all-label"><input type="checkbox" class="select-all" /> Seleccionar todos</label>
 
-          <div class="file-list">
-            <% for (var i = 0; i < fileList.length; i++) { %>
-              <label><input type="checkbox" name="file" value="<%= fileList[i] %>" class="file-li"> <%= fileList[i] %></label>
-            <% } %>
+            <div class="file-list">
+              <% for (var i = 0; i < fileList.length; i++) { %>
+                <label><input type="checkbox" name="file" value="<%= fileList[i] %>" class="file-li"> <%= fileList[i] %></label>
+              <% } %>
+            </div>
           </div>
-        </div>
 
+          <div class="form-step">
+            <h3>API Key de TinyPng</h3>
+            <p>Modificar dentro de tu archivo <strong>.env</strong><br> <small><%= apikey %></small></p>
+          </div>
+
+          <div class="form-step">
+            <h3>Ancho maximo</h3>
+            <p>Dejar vacio si usaremos ancho maximo</p>
+            <input type="number" name="ancho" placeholder="Solo números"/>
+          </div>
+
+          <input type="submit" value="Optimizar" />
+        </form>
+      <% } else { %>
         <div class="form-step">
-          <h3>API Key de TinyPng</h3>
-          <p>Modificar dentro de <strong>routes/optimizer.js</strong><br> <small><%= apikey %></small></p>
+          <h2>Falta la API Key</h2>
+          <p>Añadi un archivo <strong>.env</strong> con tu API key de TinyPNG y edita el archivo <strong>routes/optimizer.js</strong> con su nombre.
+          <br> Si aún no tenes una API Key de TinyPNG podes crearla aca:</p>
+          <a href="https://tinypng.com/developers" target="_blank"><button>Crear API Key</button></a>
         </div>
-
-        <div class="form-step">
-          <h3>Ancho maximo</h3>
-          <p>Dejar vacio si usaremos ancho maximo</p>
-          <input type="number" name="ancho" placeholder="Solo números"/>
-        </div>
-
-        <input type="submit" value="Optimizar" />
-      </form>
+      <% } %>
     </div>
   </section>
 
