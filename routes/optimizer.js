@@ -13,32 +13,6 @@ router.get("/", (req, res) => {
   res.send('get optim')
 })
 
-router.post("/results", (req, res) => {
-
-  const cantidad = req.body.file.length
-
-  res.render('results', { fileList: req.body.file, ancho: req.body.ancho, cantidad: cantidad})
-})
-
-router.get("/compress", (req, res) => {
-
-  //requiring path and fs modules
-  const path = require('path');
-  const fs = require('fs');
-  //joining path of directory 
-  const directoryPath = path.join(__dirname, '../images');
-
-  const dirents = fs.readdirSync(directoryPath, { withFileTypes: true });
-  const files = dirents
-      .filter(dirent => dirent.isFile())
-      .map(dirent => dirent.name);
-
-  const cantidad = files.length
-
-  res.render("compress", { fileList: files, apikey: apikey, cantidad: cantidad })
-})
-
-
 router.post("/rename", (req, res) => {
 
   const path = require('path');
@@ -46,6 +20,10 @@ router.post("/rename", (req, res) => {
   //joining path of directory 
   
   const directoryPath = path.join(__dirname, '../images');
+
+  if (!fs.existsSync(directoryPath)){
+    fs.mkdirSync(directoryPath);
+  }
 
   //passsing directoryPath and callback function
   fs.readdir(directoryPath, function (err, files) {
@@ -96,6 +74,41 @@ router.post("/rename", (req, res) => {
 
 })
 
+router.get("/compress", (req, res) => {
+
+  //requiring path and fs modules
+  const path = require('path');
+  const fs = require('fs');
+  //joining path of directory 
+  const directoryPath = path.join(__dirname, '../images');
+
+  if (!fs.existsSync(directoryPath)){
+    fs.mkdirSync(directoryPath);
+  }
+
+  const dirents = fs.readdirSync(directoryPath, { withFileTypes: true });
+  var files = dirents
+      .filter(dirent => dirent.isFile())
+      .map(dirent => dirent.name);
+
+  const cantidad = files.length
+
+  res.render("compress", { fileList: files, apikey: apikey, cantidad: cantidad })
+})
+
+router.post("/results", (req, res) => {
+
+  ans = Array.isArray(req.body.file);
+  if (ans) {
+    var files = req.body.file;
+    var cantidad = req.body.file.length
+  } else {
+    var files = [req.body.file];
+    var cantidad = 1
+  }
+
+  res.render('results', { fileList: files, ancho: req.body.ancho, cantidad: cantidad})
+})
 
 router.post("/action", (req, res) => {
 
@@ -115,6 +128,10 @@ router.post("/action", (req, res) => {
   });
 
   resized.result().size(function(err, size) {
+
+    if (!fs.existsSync('./images-optimized/')){
+      fs.mkdirSync('./images-optimized/');
+    }
 
     resized.toFile('./images-optimized/'+req.body.image);
     var result = formatBytes(size)

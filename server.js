@@ -15,7 +15,12 @@ app.get("/", (req, res) => {
   
   const directoryPath = path.join(__dirname, '/images');
 
+  if (!fs.existsSync(directoryPath)){
+    fs.mkdirSync(directoryPath);
+  }
+
   const dirents = fs.readdirSync(directoryPath, { withFileTypes: true });
+
   const files = dirents
       .filter(dirent => dirent.isFile())
       .map(dirent => dirent.name);

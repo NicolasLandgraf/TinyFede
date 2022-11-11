@@ -31,33 +31,39 @@
   <section class="optimizer-intro">
     
     <div class="container">
+      <% if(fileList.length > 0) { %>
+        <div class="form-step">
+          <h5>Estos archivos provienen de la carpeta "images". Añade nuevos archivos para renombrarlos y comprimirlos.<br>
+          Esta función quita tildes, espacios, caracteres especiales no admitidos en URLs, etc.</h5>
+          
+            <div class="before-aft">
+              <ul class="before-col">
+                <p class="li-title">Antes</p>
 
-      <div class="form-step">
-        <h5>Estos archivos provienen de la carpeta "images". Añade nuevos archivos para renombrarlos y comprimirlos.<br>
-        Esta función quita tildes, espacios, caracteres especiales no admitidos en URLs, etc.</h5>
+                <% for (var i = 0; i < fileList.length; i++) { %>
+                  <li index="<%= i %>"><%= fileList[i] %></li>
+                <% } %>
+              </ul>
 
-        <div class="before-aft">
-          <ul class="before-col">
-            <p class="li-title">Antes</p>
-            <% for (var i = 0; i < fileList.length; i++) { %>
-              <li index="<%= i %>"><%= fileList[i] %></li>
-            <% } %>
-          </ul>
-
-          <ul class="after-col">
-            <p class="li-title">Despues</p>
-            <% for (var i = 0; i < fileList.length; i++) { %>
-              <li id="<%= i %>"><%= fileList[i] %></li>
-            <% } %>
-          </ul>
+              <ul class="after-col">
+                <p class="li-title">Despues</p>
+                <% for (var i = 0; i < fileList.length; i++) { %>
+                  <li id="<%= i %>"><%= fileList[i] %></li>
+                <% } %>
+              </ul>
+            </div>
         </div>
-      </div>
 
-      <button class="rename-btn">Renombrar imagenes</button>
+        <button class="rename-btn">Renombrar imagenes</button>
 
-      <a href="/optimizer/compress"><button class="lowkey">Omitir</button></a>
-
+        <a href="/optimizer/compress"><button class="lowkey">Omitir</button></a>
+      <% } else { %>
+        <div class="error-div">
+          Tenes que cargar algunas imagenes en <strong>/images</strong> o esto no va a funcionar pa..
+        </div>
+      <% } %>
     </div>
+
   </section>
 
 
